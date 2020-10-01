@@ -1,5 +1,7 @@
 package com.ramkarlapudi.poc.repository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,5 +20,8 @@ public interface UserProfile extends JpaRepository<UserProfileEntity, Integer> {
 	@Modifying
 	@Query("UPDATE UserProfileEntity SET verified='YES' where userid=?1")
 	public void updateprofile(int userid);
+	
+	@Query("select passcode,verified from  UserProfileEntity where  username=?1")
+	public List<String> findByUserName(String username );
 
 }

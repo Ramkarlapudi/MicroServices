@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ramkarlapudi.poc.entity.UserProfileEntity;
+import com.ramkarlapudi.poc.model.LoginDTO;
 import com.ramkarlapudi.poc.model.MailUtil;
 import com.ramkarlapudi.poc.model.VerifyOTP;
 import com.ramkarlapudi.poc.service.MailingServiceImpl;
@@ -58,9 +59,14 @@ public class Controller {
 		
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginAuth() {
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String loginAuth(@ModelAttribute("loginpage")LoginDTO loginData , Model model  ) {
 		LOGGER.info("Login APi Called -----");
+	String message =	userProfileServiceImpl.Login(loginData);
+	model.addAttribute("loginkey" ,message);
+	if(message == "Success") {
+		return "HomePage";
+	}
 		return "LoginPage";
 		
 	}

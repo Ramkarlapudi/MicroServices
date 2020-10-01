@@ -1,7 +1,6 @@
 package com.ramkarlapudi.poc.service;
 
 import java.util.Random;
-import java.util.Timer;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -11,14 +10,15 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ramkarlapudi.poc.controller.Controller;
 import com.ramkarlapudi.poc.model.MailUtil;
 import com.ramkarlapudi.poc.model.VerifyOTP;
 
 @Component
+//@EnableScheduling 
 public class MailingServiceImpl implements MailingService {
 	private static final Logger LOGGER = LogManager.getLogger(MailingServiceImpl.class);
 	@Autowired
@@ -47,7 +47,7 @@ public class MailingServiceImpl implements MailingService {
 			helper.setText("Dear User " + mailUtil.getText() + " your otp to validate the account is" + getRandomNumberString());
 			javaMailSender.send(message);
 			flag = true;
-			OTPExpire();
+			//OTPExpire();
 		} catch (MessagingException e) {
 			flag = false;
 			LOGGER.error("Exception while eamil sent "+ mailUtil.getTo());
@@ -68,6 +68,7 @@ public class MailingServiceImpl implements MailingService {
 	}
 
 	public static String verifyOtpCheck(VerifyOTP verifyOTPUI) {
+		LOGGER.info("verifyOtpCheck Called " + VerifyOTP + verifyOTPUI.getOtpFromUi());
 		String OTP = verifyOTPUI.getOtpFromUi().trim();
 		if (OTP == null || OTP == "") {
 			return "Please Enter OTP";
@@ -82,8 +83,9 @@ public class MailingServiceImpl implements MailingService {
 		// return null;
 
 	}
-	@Scheduled(fixedDelay =120000 )
+	//@Scheduled(fixedDelay =120000 )
 	public void OTPExpire() {
+		LOGGER.info("OTPExpire Called ");
 		VerifyOTP ="expired";
 	}
 
